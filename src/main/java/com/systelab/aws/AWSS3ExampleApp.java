@@ -14,8 +14,8 @@ import java.nio.file.Files;
 import java.nio.file.Paths;
 
 public class AWSS3ExampleApp {
-    Region region = Region.EU_CENTRAL_1;
-    S3Client s3 = S3Client.builder().region(region).build();
+    private Region region = Region.EU_CENTRAL_1;
+    private S3Client s3 = S3Client.builder().region(region).build();
 
 
     public void deleteBucket(String bucketName) {
