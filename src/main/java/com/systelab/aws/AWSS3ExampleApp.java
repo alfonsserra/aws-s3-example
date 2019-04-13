@@ -49,9 +49,7 @@ public class AWSS3ExampleApp {
         ListObjectsV2Request listObjectsV2Request = ListObjectsV2Request.builder().bucket(bucketName).maxKeys(1).build();
         do {
             listObjectsV2Response = s3.listObjectsV2(listObjectsV2Request);
-            for (S3Object s3Object : listObjectsV2Response.contents()) {
-                deleteBucketObject(bucketName, s3Object.key());
-            }
+            listObjectsV2Response.contents().forEach(s3Object -> deleteBucketObject(bucketName, s3Object.key()));
 
             listObjectsV2Request = ListObjectsV2Request.builder().bucket(bucketName)
                     .continuationToken(listObjectsV2Response.nextContinuationToken())
@@ -66,9 +64,9 @@ public class AWSS3ExampleApp {
         ListObjectsV2Request listObjectsV2Request = ListObjectsV2Request.builder().bucket(bucketName).maxKeys(1).build();
         do {
             listObjectsV2Response = s3.listObjectsV2(listObjectsV2Request);
-            for (S3Object s3Object : listObjectsV2Response.contents()) {
-                System.out.println(s3Object.key());
-            }
+            listObjectsV2Response.contents().stream()
+                    .map(s3Object -> s3Object.key())
+                    .forEach(System.out::println);
 
             listObjectsV2Request = ListObjectsV2Request.builder().bucket(bucketName)
                     .continuationToken(listObjectsV2Response.nextContinuationToken())
@@ -98,7 +96,7 @@ public class AWSS3ExampleApp {
     public static void main(String[] args) {
         AWSS3ExampleApp example = new AWSS3ExampleApp();
         example.getBuckets();
-        example.getBucketContent("aserra.temp");
+        example.getBucketContent("aserra.modulab");
         try {
             example.addObjectToBucket("aserra.temp", "example.html", "example.html");
         } catch (IOException | URISyntaxException e) {
